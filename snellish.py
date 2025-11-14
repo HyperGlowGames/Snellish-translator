@@ -9,7 +9,7 @@ is_info = False
 
 #per word translator
 def snellify(word):
-    vowels = "aeiouAEIOU"
+    vowels = "aeiouAEIOU1234567890"
     if word[0] in vowels:
         return "sn" + word
     else:
