@@ -1,5 +1,11 @@
 #imports
 import argparse
+import sys
+import os
+
+#modes detection variables
+is_debug = False
+is_info = False
 
 #per word translator
 def snellify(word):
@@ -24,17 +30,19 @@ def snellify(word):
                 break
         return "sn" + word[current_index:]
 
+#per word translator (debug mode)
 def snellify_d(word):
-    print(f"translating {word}...")
+    print(f"-d: translating '{word}'...")
     vowels = "aeiouAEIOU"
     if word[0] in vowels:
-        print(f"{word} begins with vowel")
+        print(f"-d: '{word}' begins with vowel")
         return "sn" + word
     else:
+        print(f"-d: '{word}' does not begin with a vowel")
         current_index = 0
         if word[0] == "s":
             if word[1] == "n":
-                print(f"{word} begins with 'sn'")
+                print(f"-d: '{word}' begins with 'sn'")
                 return "sn" + word
             else:
                 pass
@@ -42,20 +50,24 @@ def snellify_d(word):
             pass
         for i in word:
             if current_index > 0 and i.lower() == "y":
-                print(f"{word} has a vowel-sounding 'y'")
+                print(f"-d: '{word}' contains a vowel-sounding 'y' at position {current_index}")
                 break
             if i not in vowels:
+                print(f"-d: '{word}' contains a consonant at position {current_index}")
                 current_index += 1
             else:
+                print(f"-d: '{word}' contains a vowel at position {current_index}")
                 break
-        print(f"translated {word} into: sn" + word[current_index:])
+        print(f"-d: translated '{word}' into: sn" + word[current_index:])
         return "sn" + word[current_index:]
 
 #info arg -i
 def info():
-    print("---------------------------")
-    print("--SNELLISH TRANSLATOR 1.0--")
-    print("---------------------------")
+    print("-------------------------------")
+    print("----SNELLISH TRANSLATOR 1.0----")
+    print("-------------------------------")
+    print("     informational screen      ")
+    print("-------------------------------")
     print(
     '''
 --GENERAL INFO--
@@ -78,22 +90,23 @@ snof sne snonversation sno snavoid snisunderstandings.
 5. If a word already begins with 'sn', then simply add another 'sn-' to the beginning. e.g: snail = snsnail
 
 --TRANSLATOR GUIDANCE--
-1. The translator does not handle special characters, don't use them
+1. The translator does not handle special characters at the beginning of a word
 2. For correct numerical pronunciation outputs, enter numbers in their full word form
 3. The translator cannot capitalise correctly, you will have to munually edit for proper grammar
+4. The Translator cannot handle double spaces, this is a known error
 
 --TERMINAL ARGUMENTS--
 -i : display this informational screen
--l : display the translation line-by-line, as the translator does it's work
+-d : run the translator in debug mode
     ''')
 
 #main
 def main():
-    print("---------------------------")
-    print("--SNELLISH TRANSLATOR 1.0--")
-    print("---------------------------")
-    print("Run 'snellish -i' for more info")
-    print("---------------------------")
+    print("-------------------------------")
+    print("----SNELLISH TRANSLATOR 1.0----")
+    print("-------------------------------")
+    print("run 'snellish -i' for more info")
+    print("-------------------------------")
     phrase = input("Enter string to translate: ")
     split_phrase = phrase.split(" ")
     translated_phrase = ""
@@ -103,14 +116,16 @@ def main():
 
     print("translation (snellish): " + translated_phrase)
 
+#main (debug mode)
 def main_d():
-    print("---------------------------")
-    print("--SNELLISH TRANSLATOR 1.0--")
-    print("---------------------------")
-    print("running in debug mode")
-    print("---------------------------")
+    print("-------------------------------")
+    print("----SNELLISH TRANSLATOR 1.0----")
+    print("-------------------------------")
+    print("     running in debug mode     ")
+    print("-------------------------------")
     phrase = input("Enter string to translate: ")
     split_phrase = phrase.split(" ")
+    print(f"-d: split '{phrase}' into {split_phrase}")
     translated_phrase = ""
     for i in split_phrase:
         word = snellify_d(i)
@@ -121,16 +136,40 @@ def main_d():
 
 #run
 if __name__ == '__main__':
-    #setup argument parser
-    parser = argparse.ArgumentParser(description="snellish translator 1.0 - terminal argument parser")
-    parser.add_argument("-i", action="store_true", help="get info on snellish translator 1.0")
-    parser.add_argument("-d", action="store_true", help="run the translator in debug mode")
-    args = parser.parse_args()
+    try:
+        #setup argument parser
+        parser = argparse.ArgumentParser(description="snellish translator 1.0 - terminal argument parser")
+        parser.add_argument("-i", action="store_true", help="get info on snellish translator 1.0")
+        parser.add_argument("-d", action="store_true", help="run the translator in debug mode")
+        args = parser.parse_args()
 
-    #get info
-    if args.i:
-        info()
-    elif args.d:
-        main_d()
-    else:
-        main()
+        #get info
+        if args.i:
+            is_info = True
+            info()
+        elif args.d:
+            is_debug = True
+            main_d()
+        else:
+            main()
+    except Exception as error:
+        e_type, e_obj, e_tb = sys.exc_info()
+        file = os.path.split(e_tb.tb_frame.f_code.co_filename)[1]
+        print("")
+        print("-------------------------------")
+        print("---------! E R R O R !---------")
+        print("-------------------------------")
+        print("The translator has encountered an error!")
+        print("Please rpeort this issue at: https://github.com/HyperGlowGames/Snellish-translator/issues")
+        print(f'''
+--DETAILS--
+Translator version: 1.0
+File: {file}
+Debug Mode: {is_debug}
+Info Screen: {is_info}
+Exception type: {e_type}
+Error Message: {error}
+Line: {e_tb.tb_lineno}
+                ''')
+
+
