@@ -1,3 +1,8 @@
+### SNELLISH-TRANSLATOR 1.0
+### Version: 1.0 (main branch)
+### Original Creator: HyperGlowGames on Github
+
+
 #imports
 import argparse
 import sys
