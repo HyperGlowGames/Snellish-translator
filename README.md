@@ -8,4 +8,4 @@ SNL1.0: snis snis sna snanslator snor sna snictional snanguage snown snas snsnel
 # How to use on the windows cmd
 1. cd '[insert path to the folder containing your installation of the translator]'
 2. ./snellish (for exe)
-   python ./snellish.py (for python)
+3. python ./snellish.py (for python)
