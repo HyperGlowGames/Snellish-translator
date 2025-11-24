@@ -2,7 +2,6 @@
 ### Version: 1.0 (main branch)
 ### Original Creator: HyperGlowGames on Github
 
-
 #imports
 import argparse
 import sys
@@ -97,7 +96,7 @@ snof sne snonversation sno snavoid snisunderstandings.
 --TRANSLATOR GUIDANCE--
 1. The translator does not handle special characters at the beginning of a word
 2. For correct numerical pronunciation outputs, enter numbers in their full word form
-3. The translator cannot capitalise correctly, you will have to munually edit for proper grammar
+3. The translator cannot capitalise correctly, you will have to manually edit for proper grammar
 4. The Translator cannot handle double spaces, this is a known error
 
 --TERMINAL ARGUMENTS--
@@ -157,6 +156,7 @@ if __name__ == '__main__':
             main_d()
         else:
             main()
+    #error handling
     except Exception as error:
         e_type, e_obj, e_tb = sys.exc_info()
         file = os.path.split(e_tb.tb_frame.f_code.co_filename)[1]
